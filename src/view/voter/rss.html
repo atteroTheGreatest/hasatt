@@ -1,0 +1,26 @@
+{% autoescape on %}<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" 
+        xmlns:dc="http://purl.org/dc/elements/1.1/">
+   <channel>
+   <title>Chicago Votes</title>
+   <atom:link href="http://localhost:8002/voter/rss" rel="self" type="application/rss+xml" />
+   <link>http://localhost:8002/voter/list</link>
+   <description>All the folks that's fit to vote!</description>
+   <language>en-us</language>
+   {% for voter in voters %}
+   {% if forloop.first %}
+   <lastBuildDate>{{ voter.creation_time|date:"r" }}</lastBuildDate>
+   {% endif %}
+       <item>
+           {% if voter.ward_boss %}
+           <dc:creator>{{ voter.ward_boss.name }}</dc:creator>
+           {% endif %}
+           <guid isPermaLink="true">http://localhost:8002/voter/view/{{ voter.id }}</guid>
+           <link>http://localhost:8002/voter/view/{{ voter.id }}</link>
+           <title>{{ voter.first_name }} {{ voter.last_name }}</title>
+           <description>{{ voter.notes }}</description>
+           <pubDate>{{ voter.creation_time|date:"r" }}</pubDate>
+       </item>
+   {% endfor %}
+   </channel>
+</rss>{% endautoescape %}
